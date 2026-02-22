@@ -1,9 +1,9 @@
-# Proyecto-n-7-Data-Science
-
 # GenZ Working Environment (Clasificacion Binaria) — UDD Bootcamp Modulo 7
 
+## Proyecto-n-7-Data-Science
+
 Repositorio del proyecto final del Bootcamp **Ciencia de Datos e Inteligencia Artificial (UDD)**.  
-Se construye un modelo de **clasificacion binaria** para predecir el ambiente de trabajo preferido por la Generacion Z.
+Se construye un modelo de **clasificacion binaria** para predecir el ambiente de trabajo preferido por la Generacion Z, y se publica una **API REST** (Flask + ngrok) para consumir predicciones via internet.
 
 ---
 
@@ -17,7 +17,18 @@ En este repo se incluye una copia del CSV para reproducibilidad.
 
 ---
 
-## 2) Definicion del target binario
+## 2) Contexto: iteracion multiclase (3 clases) y decision final
+Inicialmente se probo un enfoque **multiclase (3 clases)** agrupando las 6 categorias originales en:
+- `OFFICE`
+- `REMOTE`
+- `HYBRID`
+
+A pesar de iteraciones con **tuning** y **ensambles**, el desempeno multiclase fue limitado para los objetivos del proyecto (dataset pequeno y clases con patrones similares).  
+Por esta razon se adopto una formulacion **binaria**, que permite un mejor control del balance de clases y una solucion mas estable para exponer via API.
+
+---
+
+## 3) Definicion del target binario
 Target original (6 categorias) en la columna:
 
 `What is the most preferred working environment for you.`
@@ -29,7 +40,7 @@ Se define:
 
 ---
 
-## 3) Dataset y variables de entrada (features)
+## 4) Dataset y variables de entrada (features)
 El modelo usa **12 features** (11 categoricas + 1 numerica).  
 Estas mismas 12 variables son el **input del endpoint** `/predict`:
 
@@ -53,7 +64,7 @@ Notas de preprocesamiento:
 
 ---
 
-## 4) Modelo final
+## 5) Modelo final
 - Algoritmo: **Logistic Regression (tuned)**
 - Threshold decision: **0.50**
 - Model version: **logreg_l2_c0p01_v1**
@@ -61,14 +72,15 @@ Notas de preprocesamiento:
 
 ---
 
-## 5) Metricas (Test)
-### 5.1 Reporte por clase
+## 6) Metricas (Test)
+
+### 6.1 Reporte por clase
 | Clase | Precision | Recall | F1-score | Support |
 |---|---:|---:|---:|---:|
 | FULL_OFFICE | 0.3750 | 0.6000 | 0.4615 | 10 |
 | REMOTE | 0.8710 | 0.7297 | 0.7941 | 37 |
 
-### 5.2 Metricas globales
+### 6.2 Metricas globales
 | Metrica | Valor |
 |---|---:|
 | Accuracy | 0.7021 |
@@ -81,18 +93,19 @@ Interpretacion breve:
 
 ---
 
-## 6) API REST (Flask + ngrok)
+## 7) API REST (Flask + ngrok)
 
-### 6.1 Base URL (ngrok)
+### 7.1 Base URL (ngrok)
 `https://nonbeneficial-uninverted-roseanna.ngrok-free.dev`
 
 > Nota: el link de ngrok es temporal y puede cambiar si se reinicia el runtime de Google Colab o se vuelve a levantar el tunel.
 
-### 6.2 Endpoints
+### 7.2 Endpoints
 - `GET /` -> health check
 - `POST /predict` -> prediccion + confianza
 
-### 6.3 Health check
+### 7.3 Health check
+
 **Request:**
 ```bash
 curl -X GET "https://nonbeneficial-uninverted-roseanna.ngrok-free.dev/"
